@@ -1,7 +1,7 @@
 
 <?php
 
-//require('../vendor/autoload.php');
+require('../vendor/autoload.php');
 if(isset($_POST["submit"])){
 try 
 { 
@@ -45,7 +45,7 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-       // echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
@@ -81,22 +81,25 @@ if ($uploadOk == 0) {
 
     $face = new Imagick(); 
     if (FALSE === $face->readImage($target_file)) 
+    //if (FALSE === $face->readImage($dir."/a.jpg")) 
     { 
         throw new Exception(); 
     } 
 
 	$width=$face->getImageWidth();
 	$height=$face->getImageHeight();
-	//    ($width." ".$height);
+	echo ($width." ".$height);
 	
 	if($width>$height)	{
-		thumbnail($face, $height, $height, $focus = 'center');
+		echo " one";
+		thumbnail($face, $height);
 	}
 	else if($height>$width){
-		thumbnail($face, $width, $width, $focus = 'center');
+		echo "two";
+		thumbnail($face, $width);
 	}
 	$width=$face->getImageWidth();
-	
+	echo $width;
 	if($width>$g_width){
 		$face->resizeImage($g_width,$g_width,Imagick::FILTER_CATROM,1);
 	}
@@ -111,7 +114,7 @@ if ($uploadOk == 0) {
 
     // Let's merge all layers (it is not mandatory). 
     $face->flattenImages(); 
-
+	//echo "flattenerd";
 
     // Let's write the image. 
     if  (FALSE == $face->writeImage($target_file)) 
@@ -131,7 +134,7 @@ if ($uploadOk == 0) {
 			flush();
 			readfile($target_file);
 				unlink($target_file);
-			exit;
+		
 		}
 	
 	
@@ -142,46 +145,17 @@ catch (Exception $e)
     echo 'Caught exception: ' . $e->getMessage() . "\n"; 
 } 
 
-function thumbnail($image, $new_w, $new_h, $focus = 'center')
+
+
+
+
+}
+
+function thumbnail($image, $n)
 {
     $w = $image->getImageWidth();
     $h = $image->getImageHeight();
-
-    if ($w > $h) {
-        $resize_w = $w * $new_h / $h;
-        $resize_h = $new_h;
-    }
-    else {
-        $resize_w = $new_w;
-        $resize_h = $h * $new_w / $w;
-    }
-    $image->resizeImage($resize_w, $resize_h, Imagick::FILTER_LANCZOS, 0.9);
-
-    switch ($focus) {
-        case 'northwest':
-            $image->cropImage($new_w, $new_h, 0, 0);
-            break;
-
-        case 'center':
-            $image->cropImage($new_w, $new_h, ($resize_w - $new_w) / 2, ($resize_h - $new_h) / 2);
-            break;
-
-        case 'northeast':
-            $image->cropImage($new_w, $new_h, $resize_w - $new_w, 0);
-            break;
-
-        case 'southwest':
-            $image->cropImage($new_w, $new_h, 0, $resize_h - $new_h);
-            break;
-
-        case 'southeast':
-            $image->cropImage($new_w, $new_h, $resize_w - $new_w, $resize_h - $new_h);
-            break;
-    }
-}
-
-
-
+            $image->cropImage($n, $n, ($w - $n) / 2, ($h - $n) / 2);   
 }
 
 ?> 
