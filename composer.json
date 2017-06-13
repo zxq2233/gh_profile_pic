@@ -1,7 +1,7 @@
 {
   "require" : {
 	  "ext-imagick": "*",
-	  "ext-mbstring": "*",
+	  "ext-mbstring": "*"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
